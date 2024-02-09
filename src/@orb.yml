@@ -1,14 +1,14 @@
 version: 2.1
 
 description: >
-  Sample orb description
-# What will your orb allow users to accomplish?
-# Descriptions should be short, simple, and informative.
+  This orb is a bunch of loosely developed CircleCI utils.
+  It doesn't have an underlying theme.
+  It rather serves as a first line goto box to share stuff between projects.
 
 # This information will be displayed in the orb registry and is not mandatory.
 display:
-  home_url: "https://www.example.com/docs"
-  source_url: "https://github.com/<organization>/<project-name>"
+  home_url: "https://github.com/rynkowsg/rynkowsg-orb"
+  source_url: "https://github.com/rynkowsg/rynkowsg-orb"
 
 # If your orb requires other orbs, you can import them like this. Otherwise remove the "orbs" stanza.
 # orbs:
