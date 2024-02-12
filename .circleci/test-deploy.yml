@@ -1,9 +1,10 @@
 version: 2.1
 orbs:
-  # Your orb will be automatically injected here during the pipeline.
-  # Reference your orb's jobs and commands below as they will exist when built.
-  orb-tools: circleci/orb-tools@12.0
-  # The orb definition is intentionally not included here. It will be injected into the pipeline.
+  # changelog: https://github.com/CircleCI-Public/BATS-orb/releases
+  bats: circleci/bats@1.1.0
+  # orb info: https://circleci.com/developer/orbs/orb/circleci/orb-tools
+  # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
+  orb-tools: circleci/orb-tools@12.1.0
   rynkowsg-orb: {}
 
 # Use this tag to ensure test jobs always run,
@@ -35,10 +36,12 @@ jobs:
       - image: cimg/base:current
     steps:
       - checkout
-      - rynkowsg-orb/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: "true"}
+      - bats/install
+      # yq
+      - rynkowsg-orb/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: true}
       - run:
-          name: Test yq installation
-          command: ./.circleci/scripts/test_install_yq.bash "4.35.2"
+          name: "test command: install_yq"
+          command: VERSION="4.35.2" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
 
 workflows:
   test-deploy:

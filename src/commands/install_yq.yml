@@ -3,23 +3,25 @@ description: >
 
 parameters:
   debug:
-    type: string
-    default: "false"
-    description: "Debug flag to see the script with `set -x`."
+    type: boolean
+    default: false
+    description: "Flag to run the script in debug mode."
   install_dir:
     type: string
     default: ~/bin
-    description: "Destination for the installed yq."
+    description: "Destination where to install the tool."
   version:
     type: string
-    default: "4.35.2"
-    description: "Requested version"
+    default: ""
+    description:
+      Requested version. If not provided it takes the version from .tools-version
+      or a default version specified in the script.
 
 steps:
   - run:
       environment:
         DEBUG: <<parameters.debug>>
-        YQ_INSTALL_DIR: <<parameters.install_dir>>
-        YQ_VERSION: <<parameters.version>>
-      name: install_yq
+        INSTALL_DIR: <<parameters.install_dir>>
+        VERSION: <<parameters.version>>
+      name: "rynkowsg-org/install_yq"
       command: <<include(scripts/install_yq.bash)>>
