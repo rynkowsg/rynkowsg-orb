@@ -1,0 +1,25 @@
+description: >
+  Installs yq.
+
+parameters:
+  debug:
+    type: string
+    default: "false"
+    description: "Debug flag to see the script with `set -x`."
+  install_dir:
+    type: string
+    default: ~/bin
+    description: "Destination for the installed yq."
+  version:
+    type: string
+    default: "4.35.2"
+    description: "Requested version"
+
+steps:
+  - run:
+      environment:
+        DEBUG: <<parameters.debug>>
+        YQ_INSTALL_DIR: <<parameters.install_dir>>
+        YQ_VERSION: <<parameters.version>>
+      name: install_yq
+      command: <<include(scripts/install_yq.bash)>>
