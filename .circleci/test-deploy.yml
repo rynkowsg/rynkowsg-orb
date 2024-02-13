@@ -31,7 +31,7 @@ jobs:
       # Run your orb's commands to validate them.
       - rynkowsg-orb/greet
 
-  test-install-yq:
+  test-install-commands:
     docker:
       - image: cimg/base:current
     steps:
@@ -42,6 +42,11 @@ jobs:
       - run:
           name: "test command: install_yq"
           command: VERSION="4.35.2" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
+      # clj-kondo
+      - rynkowsg-orb/install_clj_kondo: {install_dir: ~/bin, version: "2024.02.12", debug: true}
+      - run:
+          name: "test command: install_clj_kondo"
+          command: VERSION="2024.02.12" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
 
 workflows:
   test-deploy:
@@ -51,14 +56,14 @@ workflows:
       - test-greet:
           filters: *filters
 
-      - test-install-yq:
+      - test-install-commands:
           filters: *filters
 
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           requires:
             - test-greet
-            - test-install-yq
+            - test-install-commands
           filters: *filters
 
       - orb-tools/publish:
