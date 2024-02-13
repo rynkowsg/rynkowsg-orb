@@ -47,6 +47,11 @@ jobs:
       - run:
           name: "test command: install_clj_kondo"
           command: VERSION="2024.02.12" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
+      # babashka
+      - rynkowsg-orb/install_babashka: {install_dir: ~/bin, version: "1.3.188", debug: true}
+      - run:
+          name: "test command: install_babashka"
+          command: VERSION="1.3.188" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
 
 workflows:
   test-deploy:

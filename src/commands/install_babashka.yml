@@ -1,0 +1,27 @@
+description: >
+  Installs babashka.
+
+parameters:
+  debug:
+    type: boolean
+    default: false
+    description: "Flag to run the script in debug mode."
+  install_dir:
+    type: string
+    default: ~/bin
+    description: "Destination where to install the tool."
+  version:
+    type: string
+    default: ""
+    description:
+      Requested version. If not provided it takes the version from .tools-version
+      or a default version specified in the script.
+
+steps:
+  - run:
+      environment:
+        DEBUG: <<parameters.debug>>
+        INSTALL_DIR: <<parameters.install_dir>>
+        VERSION: <<parameters.version>>
+      name: "rynkowsg-org/install_babashka"
+      command: <<include(scripts/install_babashka.bash)>>
