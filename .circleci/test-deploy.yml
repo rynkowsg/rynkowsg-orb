@@ -6,6 +6,40 @@ orbs:
   # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
   orb-tools: circleci/orb-tools@12.1.0
   rynkowsg-orb: {}
+  local_orb:
+    commands:
+      print_post:
+        parameters:
+          project_dir:
+            description: Print POST
+            type: string
+            default: "~/code"
+          lfs_example:
+            description: "Is LFS example"
+            type: boolean
+            default: false
+        steps:
+          - run:
+              name: Print repo content
+              environment:
+                LFS_EXAMPLE: <<parameters.lfs_example>>
+                PROJECT_DIR: <<parameters.project_dir>>
+              command: |
+                set -x
+                env | sort
+                ls -alh ~
+                if [ -d ~/.ssh ]; then
+                  ls -alh ~/.ssh
+                fi
+                ls -alh "${PROJECT_DIR}"
+                cat "${PROJECT_DIR}/regular-file.txt"
+                if [ "${LFS_EXAMPLE}" = 1 ]; then
+                  cat "${PROJECT_DIR}/lfs-file.ltxt"
+                fi
+
+docker_base_small: &docker_base_small
+  docker: [{ image: "cimg/base:2023.12" }]
+  resource_class: small
 
 # Use this tag to ensure test jobs always run,
 # even though the downstream publish job will only run on release tags.
@@ -24,16 +58,14 @@ jobs:
   # Create jobs to test the commands of your orbs.
   # You may want to add additional validation steps to ensure the commands are working as expected.
   test-greet:
-    docker:
-      - image: cimg/base:current
+    <<: *docker_base_small
     steps:
       - checkout
       # Run your orb's commands to validate them.
       - rynkowsg-orb/greet
 
   test-install-commands:
-    docker:
-      - image: cimg/base:current
+    <<: *docker_base_small
     steps:
       - checkout
       - bats/install
@@ -53,6 +85,209 @@ jobs:
           name: "test command: install_babashka"
           command: VERSION="1.3.188" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
 
+  test-clone-without-prior-checkout--single-repo:
+    <<: *docker_base_small
+    steps:
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l2"
+          debug: false
+          dest_dir: /tmp/sample-repo-l2
+          lfs: false
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2.git"
+          repo_branch: "master"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/64451475acc0db9d4cfc06b6ff1fd0dfc4c40939
+          repo_sha1: "64451475acc0db9d4cfc06b6ff1fd0dfc4c40939"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l2
+          lfs_example: false
+
+  test-clone-without-prior-checkout--single-repo-with-lfs:
+    <<: *docker_base_small
+    steps:
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l2 (lfs)"
+          debug: false
+          dest_dir: /tmp/sample-repo-l2-lfs
+          lfs: true
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2.git"
+          repo_branch: "master-lfs"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/0ec9a71496402ad9383760f0e293efa6f7f95fad
+          repo_sha1: "0ec9a71496402ad9383760f0e293efa6f7f95fad"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l2-lfs
+          lfs_example: true
+
+  test-clone-without-prior-checkout--repo-l0:
+    <<: *docker_base_small
+    steps:
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l0"
+          debug: false
+          dest_dir: /tmp/sample-repo-l0
+          lfs: false
+          submodules: true
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0.git"
+          repo_branch: "master"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/e72d6eead57c5902b9bc712ee0fc5b49974b882f
+          repo_sha1: "e72d6eead57c5902b9bc712ee0fc5b49974b882f"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l0
+          lfs_example: false
+
+  test-clone-without-prior-checkout--repo-l0-with-lfs:
+    <<: *docker_base_small
+    steps:
+#      - checkout # added so it will create id_rsa, try to remove this
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l0 (lfs)"
+          debug: true
+          dest_dir: /tmp/sample-repo-l0-lfs
+          lfs: true
+          submodules: true
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0.git"
+          repo_branch: "master-lfs"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0/commit/d972ecb0ae3d868541509ee0c01a1de6e9afe1f3
+          repo_sha1: "d972ecb0ae3d868541509ee0c01a1de6e9afe1f3"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l0-lfs
+          lfs_example: true
+      - run:
+          name: Extra
+          command: |
+            set -x
+            PROJECT_DIR="/tmp/sample-repo-l0-lfs"
+            cat "${PROJECT_DIR}/regular-file.txt"
+            cat "${PROJECT_DIR}/sample-repo-l1/regular-file.txt"
+            cat "${PROJECT_DIR}/sample-repo-l1/sample-repo-l2/regular-file.txt"
+            cat "${PROJECT_DIR}/sample-repo-l1-lfs/regular-file.txt"
+            cat "${PROJECT_DIR}/sample-repo-l1-lfs/lfs-file.ltxt"
+            cat "${PROJECT_DIR}/sample-repo-l1-lfs/sample-repo-l2/regular-file.txt"
+            cat "${PROJECT_DIR}/sample-repo-l1-lfs/sample-repo-l2-lfs/regular-file.txt"
+            cat "${PROJECT_DIR}/sample-repo-l1-lfs/sample-repo-l2-lfs/lfs-file.ltxt"
+
+  test-clone-with-prior-checkout--single-repo:
+    <<: *docker_base_small
+    steps:
+      - checkout
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l2"
+          debug: false
+          dest_dir: /tmp/sample-repo-l2
+          lfs: false
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2.git"
+          repo_branch: "master"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/64451475acc0db9d4cfc06b6ff1fd0dfc4c40939
+          repo_sha1: "64451475acc0db9d4cfc06b6ff1fd0dfc4c40939"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l2
+          lfs_example: false
+
+  test-clone-with-prior-checkout--single-repo-with-lfs:
+    <<: *docker_base_small
+    steps:
+      - checkout
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l2 (lfs)"
+          debug: false
+          dest_dir: /tmp/sample-repo-l2-lfs
+          lfs: true
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2.git"
+          repo_branch: "master-lfs"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/0ec9a71496402ad9383760f0e293efa6f7f95fad
+          repo_sha1: "0ec9a71496402ad9383760f0e293efa6f7f95fad"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l2-lfs
+          lfs_example: true
+
+  test-clone-command:
+    <<: *docker_base_small
+    steps:
+      - checkout
+      - bats/install
+
+#      # clone sample-repo-l2 - the simplest repo
+#      - rynkowsg-orb/clone_git_repo:
+#          name_displayed: "clone_git_repo/sample-repo-l2"
+#          debug: true
+#          dest_dir: /tmp/sample-repo-l2
+#          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2.git"
+#          repo_branch: "master"
+#          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/64451475acc0db9d4cfc06b6ff1fd0dfc4c40939
+#          repo_sha1: "64451475acc0db9d4cfc06b6ff1fd0dfc4c40939"
+#      - run:
+#          name: "test command: clone_git_repo/sample-repo-l2"
+#          command: REPO_DIR=/tmp/sample-repo-l2 ./test/commands/clone_git_repo/check_clone_l2.bats
+
+      # clone sample-repo-l2 (lfs) - the repo with one LFS file
+      - rynkowsg-orb/clone_git_repo:
+          name_displayed: "clone_git_repo/sample-repo-l2 (lfs)"
+          debug: false
+          dest_dir: /tmp/sample-repo-l2-lfs
+          lfs: true
+          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2.git"
+          repo_branch: "master-lfs"
+          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l2/commit/0ec9a71496402ad9383760f0e293efa6f7f95fad
+          repo_sha1: "0ec9a71496402ad9383760f0e293efa6f7f95fad"
+      - local_orb/print_post:
+          project_dir: /tmp/sample-repo-l2-lfs
+#      - run:
+#          name: "test command: clone_git_repo/sample-repo-l2 (lfs)"
+#          command: REPO_DIR=/tmp/sample-repo-l2-lfs ./test/commands/clone_git_repo/check_clone_l2_lfs.bats
+
+#      # clone sample-repo-l1 - the repo with one submodule: a regular repo
+#      - rynkowsg-orb/clone_git_repo:
+#          debug: true
+#          dest_dir: /tmp/sample-repo-l1
+#          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l1.git"
+#          repo_branch: "master"
+#          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l1/commit/f44af4a9310cf6628c4ef134e49b59acafdb38eb
+#          repo_sha1: "f44af4a9310cf6628c4ef134e49b59acafdb38eb"
+#          submodules: true
+#      - run:
+#          name: "test command: clone_git_repo/sample-repo-l1"
+#          command: REPO_DIR=/tmp/sample-repo-l1 ./test/commands/clone_git_repo/check_clone_l1.bats
+#
+#      # clone sample-repo-l1 (lfs) - the repo with two submodules: a regular repo and LFS one
+#      - rynkowsg-orb/clone_git_repo:
+#          debug: true
+#          dest_dir: /tmp/sample-repo-l1
+#          lfs: true
+#          repo_branch: "master-lfs"
+#          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l1.git"
+#          submodules: true
+#          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l1/commit/4f6db90aecdd0ee0707668b34dbd5d1573986300
+#          repo_sha1: "4f6db90aecdd0ee0707668b34dbd5d1573986300"
+#      - run:
+#          name: "test command: clone_git_repo/sample-repo-l1 (lfs)"
+#          command: REPO_DIR=/tmp/sample-repo-l1-lfs ./test/commands/clone_git_repo/check_clone_l1_lfs.bats
+#
+#      # clone sample-repo-l0 - the repo with nested submodules - regular repos only
+#      - rynkowsg-orb/clone_git_repo:
+#          debug: true
+#          dest_dir: /tmp/sample-repo-l0
+#          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0.git"
+#          repo_branch: "master"
+#          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0/commit/22fd75655c084a283db06e488031bf07abe0660a
+#          repo_sha1: "22fd75655c084a283db06e488031bf07abe0660a"
+#          submodules: true
+#      - run:
+#          name: "test command: clone_git_repo/sample-repo-l0"
+#          command: REPO_DIR=/tmp/sample-repo-l0 ./test/commands/clone_git_repo/check_clone_l0.bats
+#
+#      # clone sample-repo-l0 (lfs) -the repo with nested submodules - both regular and LFS repos
+#      - rynkowsg-orb/clone_git_repo:
+#          debug: true
+#          dest_dir: /tmp/sample-repo-l0
+#          lfs: true
+#          repo_branch: "master-lfs"
+#          repo_url: "https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0.git"
+#          submodules: true
+#          # https://github.com/rynkowsg/rynkowsg-orb-sample-repo-l0/commit/389d5d8f20413f96b4fc4634eca1eda02dc5d520
+#          repo_sha1: "389d5d8f20413f96b4fc4634eca1eda02dc5d520"
+#      - run:
+#          name: "test command: clone_git_repo/sample-repo-l0 (lfs)"
+#          command: REPO_DIR=/tmp/sample-repo-l0-lfs ./test/commands/clone_git_repo/check_clone_l0_lfs.bats
+
 workflows:
   test-deploy:
     jobs:
@@ -61,6 +296,55 @@ workflows:
       - test-greet:
           filters: *filters
 
+      - test-clone-without-prior-checkout--repo-l0:
+          name: "test-clone-without-prior-checkout--repo-l0--with-context"
+          context:
+            - proj/rynkowsg-orb
+          filters: *filters
+
+      - test-clone-without-prior-checkout--repo-l0-with-lfs:
+          name: "test-clone-without-prior-checkout--repo-l0-with-lfs--with-context"
+          context:
+            - proj/rynkowsg-orb
+          filters: *filters
+
+      - test-clone-without-prior-checkout--single-repo:
+          name: "test-clone-without-prior-checkout--single-repo"
+          filters: *filters
+
+      - test-clone-without-prior-checkout--single-repo-with-lfs:
+          name: "test-clone-without-prior-checkout--single-repo-with-lfs"
+          filters: *filters
+
+      - test-clone-without-prior-checkout--single-repo:
+          name: "test-clone-without-prior-checkout--single-repo--with-context"
+          context:
+            - proj/rynkowsg-orb
+          filters: *filters
+
+      - test-clone-without-prior-checkout--single-repo-with-lfs:
+          name: "test-clone-without-prior-checkout--single-repo-with-lfs--with-context"
+          context:
+            - proj/rynkowsg-orb
+          filters: *filters
+
+      - test-clone-with-prior-checkout--single-repo:
+          name: "test-clone-with-prior-checkout--single-repo--with-context"
+          context:
+            - proj/rynkowsg-orb
+          filters: *filters
+
+      - test-clone-with-prior-checkout--single-repo-with-lfs:
+          name: "test-clone-with-prior-checkout--single-repo-with-lfs--with-context"
+          context:
+            - proj/rynkowsg-orb
+          filters: *filters
+
+#      - test-clone-command:
+#          context:
+#            - proj/rynkowsg-orb
+#          filters: *filters
+
       - test-install-commands:
           filters: *filters
 
@@ -68,7 +352,16 @@ workflows:
       - orb-tools/pack:
           requires:
             - test-greet
+#            - test-clone-command
             - test-install-commands
+            - test-clone-without-prior-checkout--repo-l0--with-context
+            - test-clone-without-prior-checkout--repo-l0-with-lfs--with-context
+            - test-clone-without-prior-checkout--single-repo--with-context
+            - test-clone-without-prior-checkout--single-repo-with-lfs--with-context
+            - test-clone-with-prior-checkout--single-repo--with-context
+            - test-clone-with-prior-checkout--single-repo-with-lfs--with-context
+            - test-clone-without-prior-checkout--single-repo
+            - test-clone-without-prior-checkout--single-repo-with-lfs
           filters: *filters
 
       - orb-tools/publish:
