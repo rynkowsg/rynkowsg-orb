@@ -9,13 +9,17 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/.." || exit 1; pwd -P)"
 # detect ROOT_DIR - END
 
 DEBUG=${DEBUG:-0}
+APPLY_PATCHES=${APPLY_PATCHES:-1}
 
 if [ "${DEBUG}" = 1 ]; then
   echo "SCRIPT_DIR: ${SCRIPT_DIR}"
   echo "ROOT_DIR: ${ROOT_DIR}"
+  echo "APPLY_PATCHES: ${APPLY_PATCHES}"
 fi
 
-git apply "${SCRIPT_DIR}/res/pre-format.patch"
+if [ "${APPLY_PATCHES}" = 1 ]; then
+  git apply "${SCRIPT_DIR}/res/pre-format.patch"
+fi
 
 find "${ROOT_DIR}" -type f \( -name '*.bash' -o -name '*.sh' \) | while IFS= read -r file; do
   echo "Processing file: $file"
@@ -37,4 +41,6 @@ find "${ROOT_DIR}" -type f -name '*.bats' | while IFS= read -r file; do
     "${file}"
 done
 
-git apply "${SCRIPT_DIR}/res/post-format.patch"
+if [ "${APPLY_PATCHES}" = 1 ]; then
+  git apply "${SCRIPT_DIR}/res/post-format.patch"
+fi
