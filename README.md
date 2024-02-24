@@ -17,10 +17,6 @@ For full usage guidelines, see the [orb registry listing][orb-info-docs].
 
 I welcome [issues][gh-issues] to and [pull requests][gh-pulls] against this repository!
 
-## Docs
-
-- [`clone_git_repo` troubleshooting](./docs/clone_git_repo_troubleshooting.md)
-
 ## License
 
 Copyright © 2024 Greg Rynkowski
