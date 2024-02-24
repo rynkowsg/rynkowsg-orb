@@ -36,7 +36,8 @@ path_in_path() {
   fi
 }
 
-# $1 - install directory
+# $1 - version
+# $2 - install directory (optional)
 bb_install() {
   printf "${GREEN}%s${NC}\n" "Installation started."
   local version=${1}
@@ -148,7 +149,7 @@ main() {
     bb_install "${version}" "${install_dir}"
   elif ! bb_is_version "${version}"; then
     printf "${YELLOW}%s${NC}\n" "The installed version of ${NAME} ($(bb_version)) is different then expected (${version})."
-    bb_install "${install_dir}"
+    bb_install "${version}" "${install_dir}"
   else
     printf "${YELLOW}%s${NC}\n" "${NAME} is already installed in $(which ${CMD_NAME})."
   fi
