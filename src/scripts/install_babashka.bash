@@ -26,15 +26,29 @@ NAME="babashka"
 ASDF_ENTRY_NAME="babashka"
 CMD_NAME="bb"
 
+## common
+
 # $1 - expected path
 path_in_path() {
   local dir="$1"
-  if echo "$PATH" | tr ':' '\n' | grep -qx "$dir"; then
+  if echo "${PATH}" | tr ':' '\n' | grep -qx "${dir}"; then
     return 0 # true
   else
     return 1 # false
   fi
 }
+
+# $1 - command name
+is_installed() {
+  local command_name="$1"
+  if command -v "${command_name}" >/dev/null; then
+    return 0 # true
+  else
+    return 1 # false
+  fi
+}
+
+## babashka specific
 
 # $1 - version
 # $2 - install directory (optional)
@@ -63,16 +77,6 @@ bb_install() {
   if ! path_in_path "${install_dir}"; then
     export PATH="${install_dir}:${PATH}"
     printf "${GREEN}%s${NC}\n" "Updated PATH with ${install_dir}."
-  fi
-}
-
-# $1 - command name
-is_installed() {
-  local command_name="$1"
-  if command -v "${command_name}" >/dev/null; then
-    return 0 # true
-  else
-    return 1 # false
   fi
 }
 
