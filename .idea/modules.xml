@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/@bin/@bin.iml" filepath="$PROJECT_DIR$/@bin/@bin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/rynkowsg-orb.iml" filepath="$PROJECT_DIR$/.idea/rynkowsg-orb.iml" />
     </modules>
   </component>

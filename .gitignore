@@ -4,3 +4,6 @@ orb.yml
 
 # Jetbrains IDE's
 .idea
+
+# Clojure
+.cpcache
