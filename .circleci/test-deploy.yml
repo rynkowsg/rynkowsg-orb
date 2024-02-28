@@ -34,6 +34,33 @@ jobs:
       # Run your orb's commands to validate them.
       - rynkowsg-orb/greet
 
+  test_install_asdf:
+    <<: *docker_base_small
+    parameters:
+      # parameters copied from install_asdf
+      debug:
+        type: boolean
+        default: false
+        description: "Flag to run the script in debug mode."
+      install_dir:
+        type: string
+        default: ""
+        description: "Destination where to install the tool. ASDF_DIR is set to that value. By defaults takes ~/.asdf."
+      version:
+        type: string
+        default: ""
+        description:
+          Requested version. If not provided it install the latest.
+    steps:
+      - checkout
+      - rynkowsg-orb/install_asdf:
+          debug: << parameters.debug >>
+          install_dir: << parameters.install_dir >>
+          version: << parameters.version >>
+      - run:
+          name: "test command: asdf"
+          command: asdf --version
+
   test-install-commands:
     <<: *docker_base_small
     steps:
@@ -64,6 +91,14 @@ workflows:
           filters: *filters
 
       - test-install-commands:
+          filters: *filters
+
+      - test_install_asdf:
+          name: "test_install_asdf|ver=<< matrix.version >>|"
+          matrix:
+            parameters:
+              version: ["", "0.14.0"]
+              install_dir: ["", "/tmp/some-tmp-dir"]
           filters: *filters
 
       # The orb must be re-packed for publishing, and saved to the workspace.

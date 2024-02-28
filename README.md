@@ -9,6 +9,10 @@
 
 This orb doesn't stick to any particular theme. It's just my go-to orb for sharing configs and scripts across projects using CircleCI.
 
+Currently working here on:
+- bash-pack - a script to combine set of bash files into one final bash file
+- asdf-orb
+
 ## Usage
 
 For full usage guidelines, see the [orb registry listing][orb-info-docs].
