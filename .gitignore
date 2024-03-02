@@ -1,9 +1,15 @@
-# orb.yml is "packed" from source, and not published directly from the repository.
-orb.yml
+# JetBrains IDEs
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/dictionaries/
+!/.idea/runConfigurations/
+/*.iml
+
+# MacOS
 .DS_Store
 
-# Jetbrains IDE's
-.idea
+# CircleCI
+orb.yml
 
 # Clojure
 .cpcache
