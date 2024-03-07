@@ -1,0 +1,17 @@
+description: >
+  Install babashka.
+
+usage:
+  version: 2.1
+  orbs:
+    rynkowsg: rynkowsg/rynkowsg@0.1.1
+
+jobs:
+  install_bb:
+    steps:
+      - rynkowsg/install_babashka
+
+  workflows:
+    test:
+      jobs:
+        - install_bb
