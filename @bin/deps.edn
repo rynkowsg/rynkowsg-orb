@@ -1,4 +1,4 @@
-{:src "clj"
+{:paths ["clj"]
 
  :deps {org.clojure/clojure {:mvn/version "1.11.1"}
         babashka/fs {:mvn/version "0.2.12"}
