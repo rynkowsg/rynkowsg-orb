@@ -5,7 +5,7 @@ orbs:
   # orb info: https://circleci.com/developer/orbs/orb/circleci/orb-tools
   # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
   orb-tools: circleci/orb-tools@12.1.0
-  rynkowsg-orb: {}
+  rynkowsg: {}
 
 docker_base_small: &docker_base_small
   docker: [{ image: "cimg/base:2023.12" }]
@@ -32,7 +32,7 @@ jobs:
     steps:
       - checkout
       # Run your orb's commands to validate them.
-      - rynkowsg-orb/greet
+      - rynkowsg/greet
 
   test_install_asdf:
     <<: *docker_base_small
@@ -53,7 +53,7 @@ jobs:
           Requested version. If not provided it install the latest.
     steps:
       - checkout
-      - rynkowsg-orb/install_asdf:
+      - rynkowsg/install_asdf:
           debug: << parameters.debug >>
           install_dir: << parameters.install_dir >>
           version: << parameters.version >>
@@ -67,17 +67,17 @@ jobs:
       - checkout
       - bats/install
       # yq
-      - rynkowsg-orb/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: true}
+      - rynkowsg/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: true}
       - run:
           name: "test command: install_yq"
           command: VERSION="4.35.2" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
       # clj-kondo
-      - rynkowsg-orb/install_clj_kondo: {install_dir: ~/bin, version: "2024.02.12", debug: true}
+      - rynkowsg/install_clj_kondo: {install_dir: ~/bin, version: "2024.02.12", debug: true}
       - run:
           name: "test command: install_clj_kondo"
           command: VERSION="2024.02.12" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
       # babashka
-      - rynkowsg-orb/install_babashka: {install_dir: ~/bin, version: "1.3.188", debug: true}
+      - rynkowsg/install_babashka: {install_dir: ~/bin, version: "1.3.188", debug: true}
       - run:
           name: "test command: install_babashka"
           command: VERSION="1.3.188" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
@@ -110,7 +110,7 @@ workflows:
 
       - orb-tools/publish:
           name: publish-dev
-          orb_name: rynkowsg/rynkowsg-orb
+          orb_name: rynkowsg/rynkowsg
           vcs_type: << pipeline.project.type >>
           pub_type: dev
           # Ensure this job requires all test jobs and the pack job.
@@ -121,7 +121,7 @@ workflows:
 
       - orb-tools/publish:
           name: publish-prod
-          orb_name: rynkowsg/rynkowsg-orb
+          orb_name: rynkowsg/rynkowsg
           vcs_type: << pipeline.project.type >>
           pub_type: production
           requires:
