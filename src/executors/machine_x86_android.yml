@@ -1,0 +1,27 @@
+description: |
+  Android machine executor.
+
+machine:
+  image: android:<<parameters.tag>>
+
+resource_class: <<parameters.resource_class>>
+
+parameters:
+  tag:
+    # https://circleci.com/developer/machine/image/android
+    type: string
+    default: "2024.01.1"
+    description: >
+      Tag of CircleCI Android machine image to use.
+      Android machine tags can be found at
+      https://circleci.com/developer/machine/image/android#image-tags
+
+  resource_class:
+    # https://circleci.com/docs/configuration-reference/#linuxvm-execution-environment
+    type: enum
+    enum: ["medium", "large", "xlarge", "2xlarge", "2xlarge+"]
+    default: "medium"
+    description: |
+      Resource class used for the executor. It is recommended
+      to use large and above to avoid memory issues such as process
+      crashes when running emulator tests.

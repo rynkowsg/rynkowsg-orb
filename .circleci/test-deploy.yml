@@ -25,6 +25,13 @@ release-filters: &release-filters
     only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 
 jobs:
+  test_executor:
+    parameters:
+      executor: {type: string}
+    executor: rynkowsg/docker_x86_cimg_base
+    steps:
+      - run: uname -a
+
   test_install_asdf:
     <<: *docker_base_small
     parameters:
@@ -76,6 +83,23 @@ jobs:
 workflows:
   test-deploy:
     jobs:
+      - test_executor:
+          name: "test_executor; E:<<matrix.executor>>"
+          matrix:
+            parameters:
+              executor:
+                - rynkowsg/docker_arm
+                - rynkowsg/docker_arm_cimg_base
+                - rynkowsg/docker_x86
+                - rynkowsg/docker_x86_cimg_android
+                - rynkowsg/docker_x86_cimg_base
+                - rynkowsg/docker_x86_cimg_python
+                - rynkowsg/machine_arm
+                - rynkowsg/machine_arm_ubuntu2204
+                - rynkowsg/machine_x86_android
+                - rynkowsg/machine_x86_ubuntu2204
+                - rynkowsg/macos
+
       - test-install-commands:
           filters: *filters
 

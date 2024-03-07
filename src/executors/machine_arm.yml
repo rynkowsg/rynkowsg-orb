@@ -1,0 +1,22 @@
+description: >
+  Machine executor running on ARM.
+
+machine:
+  image: <<parameters.image>>
+
+resource_class: <<parameters.resource_class>>
+
+parameters:
+  image:
+    # https://circleci.com/developer/images?imageType=machine
+    type: string
+    default: "ubuntu-2204:2024.01.1"
+    description: >
+      Image.
+
+  resource_class:
+    # https://circleci.com/docs/configuration-reference/#linuxvm-execution-environment
+    description: Configure the executor resource class
+    type: enum
+    enum: ["arm.medium", "arm.large", "arm.xlarge", "arm.2xlarge"]
+    default: "arm.medium"
