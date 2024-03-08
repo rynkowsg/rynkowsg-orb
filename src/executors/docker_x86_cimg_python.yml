@@ -10,7 +10,7 @@ parameters:
   tag:
     # https://circleci.com/developer/images/image/cimg/python
     type: string
-    default: "2024.02"
+    default: "3.11.8"
     description: >
       What version of the cimg/base image? For full list, see
       https://circleci.com/developer/images/image/cimg/python
