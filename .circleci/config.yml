@@ -19,15 +19,19 @@ workflows:
           filters: *filters
 
       - orb-tools/lint:
+          executor: {name: orb-tools/python, resource_class: small}
           filters: *filters
 
       - orb-tools/pack:
+          executor: {name: orb-tools/default, resource_class: small}
           filters: *filters
 
       - orb-tools/review:
+          executor: {name: orb-tools/default, resource_class: small}
           filters: *filters
 
       - orb-tools/continue:
+          executor: {name: orb-tools/default, resource_class: small}
           requires:
             - orb-tools/lint
             - orb-tools/pack
