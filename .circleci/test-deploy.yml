@@ -7,10 +7,6 @@ orbs:
   orb-tools: circleci/orb-tools@12.1.0
   rynkowsg: {}
 
-docker_base_small: &docker_base_small
-  docker: [{ image: "cimg/base:2023.12" }]
-  resource_class: small
-
 # Use this tag to ensure test jobs always run,
 # even though the downstream publish job will only run on release tags.
 filters: &filters
@@ -33,7 +29,7 @@ jobs:
       - run: uname -a
 
   test_install_asdf:
-    <<: *docker_base_small
+    executor: rynkowsg/docker_x86_cimg_base
     parameters:
       # parameters copied from install_asdf
       debug:
@@ -60,7 +56,7 @@ jobs:
           command: asdf --version
 
   test_install_commands:
-    <<: *docker_base_small
+    executor: rynkowsg/docker_x86_cimg_base
     steps:
       - checkout
       - bats/install
