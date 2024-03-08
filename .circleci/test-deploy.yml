@@ -29,7 +29,6 @@ jobs:
       - run: uname -a
 
   test_install_asdf:
-    executor: rynkowsg/docker_x86_cimg_base
     parameters:
       # parameters copied from install_asdf
       debug:
@@ -45,6 +44,7 @@ jobs:
         default: ""
         description:
           Requested version. If not provided it install the latest.
+    executor: rynkowsg/docker_x86_cimg_base
     steps:
       - checkout
       - rynkowsg/install_asdf:
