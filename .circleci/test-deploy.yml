@@ -24,7 +24,7 @@ jobs:
   test_executor:
     parameters:
       executor: {type: string}
-    executor: rynkowsg/docker_x86_cimg_base
+    executor: <<parameters.executor>>
     steps:
       - run: uname -a
 
