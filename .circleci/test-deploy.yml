@@ -52,14 +52,14 @@ jobs:
     steps:
       - checkout
       - rynkowsg/install_asdf:
-          debug: << parameters.debug >>
-          install_dir: << parameters.install_dir >>
-          version: << parameters.version >>
+          debug: <<parameters.debug>>
+          install_dir: <<parameters.install_dir>>
+          version: <<parameters.version>>
       - run:
           name: "test command: asdf"
           command: asdf --version
 
-  test-install-commands:
+  test_install_commands:
     <<: *docker_base_small
     steps:
       - checkout
@@ -100,11 +100,11 @@ workflows:
                 - rynkowsg/machine_x86_ubuntu2204
                 - rynkowsg/macos
 
-      - test-install-commands:
+      - test_install_commands:
           filters: *filters
 
       - test_install_asdf:
-          name: "test_install_asdf|ver=<< matrix.version >>|"
+          name: "test_install_asdf; V:<<matrix.version>>, D:<<matrix.install_dir>>"
           matrix:
             parameters:
               version: ["", "0.14.0"]
@@ -113,25 +113,26 @@ workflows:
 
       - orb-tools/pack:
           requires:
-            - test-install-commands
+            - test_install_asdf
+            - test_install_commands
           filters: *filters
 
       - orb-tools/publish:
           name: publish-dev
-          orb_name: rynkowsg/rynkowsg
-          vcs_type: << pipeline.project.type >>
-          pub_type: dev
           requires:
             - orb-tools/pack
           context: circleci/orb-publishing-context
           filters: *filters
+          orb_name: rynkowsg/rynkowsg
+          pub_type: dev
+          vcs_type: <<pipeline.project.type>>
 
       - orb-tools/publish:
           name: publish-prod
-          orb_name: rynkowsg/rynkowsg
-          vcs_type: << pipeline.project.type >>
-          pub_type: production
           requires:
             - publish-dev
           context: circleci/orb-publishing-context
           filters: *release-filters
+          orb_name: rynkowsg/rynkowsg
+          pub_type: production
+          vcs_type: <<pipeline.project.type>>
