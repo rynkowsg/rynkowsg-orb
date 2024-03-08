@@ -89,6 +89,7 @@ workflows:
                 - rynkowsg/docker_x86
                 - rynkowsg/docker_x86_cimg_android
                 - rynkowsg/docker_x86_cimg_base
+                - rynkowsg/docker_x86_cimg_clojure
                 - rynkowsg/docker_x86_cimg_python
                 - rynkowsg/machine_arm
                 - rynkowsg/machine_arm_ubuntu2204

@@ -1,19 +1,19 @@
 description: >
-  Docker executor with Ubuntu based image for running Python.
+  Docker executor with Ubuntu based image for running Clojure.
 
 docker:
-  - image: cimg/python:<<parameters.tag>>
+  - image: cimg/clojure:<<parameters.tag>>
 
 resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
-    # https://circleci.com/developer/images/image/cimg/python
+    # https://circleci.com/developer/images/image/cimg/clojure
     type: string
-    default: "3.11.8"
+    default: "1.11.1"
     description: >
-      The version of the cimg/python image. For full list, see
-      https://circleci.com/developer/images/image/cimg/python
+      The version of the cimg/clojure image. For full list, see
+      https://circleci.com/developer/images/image/cimg/clojure
 
   resource_class:
     # https://circleci.com/docs/configuration-reference/#docker-execution-environment

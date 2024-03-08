@@ -1,5 +1,5 @@
 description: >
-  Docker executor with Ubuntu based image.
+  Docker executor supporting Clojure.
 
 docker:
   - image: cimg/base:<<parameters.tag>>
