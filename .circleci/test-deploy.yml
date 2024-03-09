@@ -111,6 +111,7 @@ workflows:
 
       - orb-tools/pack:
           requires:
+            - test_executor
             - test_install_asdf
             - test_install_commands
           filters: *filters
