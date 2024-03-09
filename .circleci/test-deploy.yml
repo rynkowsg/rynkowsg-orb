@@ -96,6 +96,7 @@ workflows:
                 - rynkowsg/machine_x86_android
                 - rynkowsg/machine_x86_ubuntu2204
                 - rynkowsg/macos
+          filters: *filters
 
       - test_install_commands:
           filters: *filters
