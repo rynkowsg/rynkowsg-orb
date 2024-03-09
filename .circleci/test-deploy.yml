@@ -23,7 +23,7 @@ release-filters: &release-filters
 jobs:
   test_executor:
     parameters:
-      executor: {type: string}
+      executor: {type: executor}
     executor: <<parameters.executor>>
     steps:
       - run: uname -a
