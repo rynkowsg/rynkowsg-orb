@@ -1,23 +1,23 @@
 description: >
-  Use sample executors
+  Use executors
 
 usage:
   version: 2.1
   orbs:
-    rynkowsg: rynkowsg/rynkowsg@0.1.2
+    rynkowsg: rynkowsg/rynkowsg@0.3.0
 
-jobs:
-  test_on_docker:
-    executor: rynkowsg/docker_x86_cimg_base
-    steps:
-      - run: uname -a
-  test_on_machine:
-    executor: rynkowsg/machine_x86_ubuntu2204
-    steps:
-      - run: uname -a
+  jobs:
+    test_on_docker:
+      executor: rynkowsg/docker_x86_cimg_base
+      steps:
+        - run: uname -a
+    test_on_macos:
+      executor: rynkowsg/machine_x86_ubuntu2204
+      steps:
+        - run: uname -a
 
   workflows:
     test:
       jobs:
         - test_on_docker
-        - test_on_machine
+        - test_on_macos
