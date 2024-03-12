@@ -22,5 +22,5 @@ steps:
         PARAM_DEBUG: <<parameters.debug>>
         PARAM_INSTALL_DIR: <<parameters.install_dir>>
         PARAM_VERSION: <<parameters.version>>
-      name: "rynkowsg-org/install_asdf"
+      name: "rynkowsg/install_asdf"
       command: <<include(scripts/gen/install_asdf.bash)>>

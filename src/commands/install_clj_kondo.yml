@@ -23,5 +23,5 @@ steps:
         DEBUG: <<parameters.debug>>
         INSTALL_DIR: <<parameters.install_dir>>
         VERSION: <<parameters.version>>
-      name: "rynkowsg-org/install_clj_kondo"
+      name: "rynkowsg/install_clj_kondo"
       command: <<include(scripts/install_clj_kondo.bash)>>

@@ -23,5 +23,5 @@ steps:
         DEBUG: <<parameters.debug>>
         INSTALL_DIR: <<parameters.install_dir>>
         VERSION: <<parameters.version>>
-      name: "rynkowsg-org/install_babashka"
+      name: "rynkowsg/install_babashka"
       command: <<include(scripts/install_babashka.bash)>>

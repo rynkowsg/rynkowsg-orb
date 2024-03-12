@@ -149,7 +149,7 @@ function main {
     clj_kondo_install "${version}" "${install_dir}"
   elif ! clj_kondo_is_version "${version}"; then
     printf "${YELLOW}%s${NC}\n" "The installed version of ${NAME} ($(clj_kondo_version)) is different then expected (${version})."
-    clj_kondo_install "${install_dir}"
+    clj_kondo_install "${version}" "${install_dir}"
   else
     printf "${YELLOW}%s${NC}\n" "${NAME} is already installed in $(which ${CMD_NAME})."
   fi
