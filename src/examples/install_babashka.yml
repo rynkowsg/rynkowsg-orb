@@ -4,12 +4,13 @@ description: >
 usage:
   version: 2.1
   orbs:
-    rynkowsg: rynkowsg/rynkowsg@0.1.1
+    rynkowsg: rynkowsg/rynkowsg@0.3.0
 
-jobs:
-  install_bb:
-    steps:
-      - rynkowsg/install_babashka
+  jobs:
+    install_bb:
+      docker: [{image: "cimg/base:stable"}]
+      steps:
+        - rynkowsg/install_babashka
 
   workflows:
     test:
