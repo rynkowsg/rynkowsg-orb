@@ -13,6 +13,13 @@ This orb doesn't stick to any particular theme. It's just my go-to orb for shari
 
 For full usage guidelines, see the [orb registry listing][orb-page].
 
+## Check out also
+
+| Name                                                            | Description                                                                                       |
+|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| [`rynkowsg/asdf`](https://github.com/rynkowsg/asdf-orb)         | Orb providing support for ASDF                                                                    |
+| [`rynkowsg/checkout`](https://github.com/rynkowsg/checkout-orb) | Advanced checkout with support of LFS, submodules, custom SSH identities, shallow clones and more |
+
 ## License
 
 Copyright © 2024 Greg Rynkowski
