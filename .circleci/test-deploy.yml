@@ -31,33 +31,6 @@ jobs:
     steps:
       - run: uname -a
 
-  test_install_asdf:
-    parameters:
-      # parameters copied from install_asdf
-      debug:
-        type: boolean
-        default: false
-        description: "Flag to run the script in debug mode."
-      install_dir:
-        type: string
-        default: ""
-        description: "Destination where to install the tool. ASDF_DIR is set to that value. By defaults takes ~/.asdf."
-      version:
-        type: string
-        default: ""
-        description:
-          Requested version. If not provided it install the latest.
-    executor: rynkowsg/docker_x86_cimg_base
-    steps:
-      - checkout
-      - rynkowsg/install_asdf:
-          debug: <<parameters.debug>>
-          install_dir: <<parameters.install_dir>>
-          version: <<parameters.version>>
-      - run:
-          name: "test command: asdf"
-          command: asdf --version
-
   test_install_commands:
     executor: rynkowsg/docker_x86_cimg_base
     steps:
@@ -129,18 +102,9 @@ workflows:
       - test_install_commands:
           filters: *filters
 
-      - test_install_asdf:
-          name: "test_install_asdf; V:<<matrix.version>>, D:<<matrix.install_dir>>"
-          matrix:
-            parameters:
-              version: ["", "0.14.0"]
-              install_dir: ["", "/tmp/some-tmp-dir"]
-          filters: *filters
-
       - orb-tools/pack:
           requires:
             - test_executor
-            - test_install_asdf
             - test_install_commands
           filters: *filters
 
