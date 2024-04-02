@@ -16,3 +16,6 @@ orb.yml
 
 # Clojure
 .cpcache
+
+# sosh
+.github_deps

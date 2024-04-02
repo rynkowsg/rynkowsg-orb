@@ -46,7 +46,7 @@ sosh_install() {
   eval install_dir="${install_dir}"
   mkdir -p "${install_dir}"
   # install
-  curl -s https://raw.githubusercontent.com/rynkowsg/sosh/${version}/main/src/pl/rynkowski/sosh.cljc -o "${install_dir}/${CMD_NAME}"
+  curl -s "https://raw.githubusercontent.com/rynkowsg/sosh/${version}/main/src/pl/rynkowski/sosh.cljc" -o "${install_dir}/${CMD_NAME}"
   chmod +x "${install_dir}/${CMD_NAME}"
   printf "${GREEN}%s${NC}\n" "${NAME} installed in ${install_dir}."
   # update PATH (if needed)
