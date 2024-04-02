@@ -3,7 +3,7 @@
 ###
 # Bats script validating orb command install_babashka.
 #
-#  INSTALL_DIR=~/bin ./test/command/test_command_install_shellpack.bash
+#  INSTALL_DIR=~/bin ./test/command/test_command_install_sosh.bash
 ###
 
 # detect ROOT_DIR - BEGIN
@@ -12,7 +12,7 @@ ROOT_DIR="$(cd "${TEST_DIR}/../.." || exit 1; pwd -P)"
 # detect ROOT_DIR - end
 
 setup() {
-  source "${ROOT_DIR}/src/scripts/install_shellpack.bash" # CMD_NAME
+  source "${ROOT_DIR}/src/scripts/install_sosh.bash" # CMD_NAME
 }
 
 @test "Can be found in PATH and run" {

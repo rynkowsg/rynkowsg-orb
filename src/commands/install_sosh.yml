@@ -1,5 +1,5 @@
 description: >
-  Installs shellpack.
+  Installs sosh.
 
 parameters:
   debug:
@@ -23,5 +23,5 @@ steps:
         DEBUG: <<parameters.debug>>
         INSTALL_DIR: <<parameters.install_dir>>
         VERSION: <<parameters.version>>
-      name: "rynkowsg/install_shellpack"
-      command: <<include(scripts/install_shellpack.bash)>>
+      name: "rynkowsg/install_sosh"
+      command: <<include(scripts/install_sosh.bash)>>

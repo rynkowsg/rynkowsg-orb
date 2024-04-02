@@ -98,11 +98,11 @@ jobs:
       - run:
           name: "test command: install_babashka"
           command: VERSION="1.3.188" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
-      # shellpack
-      - rynkowsg/install_shellpack: {install_dir: ~/bin, version: "dev", debug: true}
+      # sosh
+      - rynkowsg/install_sosh: {install_dir: ~/bin, version: "dev", debug: true}
       - run:
-          name: "test command: install_shellpack"
-          command: VERSION="dev" INSTALL_DIR=~/bin ./test/commands/test_command_install_shellpack.bats
+          name: "test command: install_sosh"
+          command: VERSION="dev" INSTALL_DIR=~/bin ./test/commands/test_command_install_sosh.bats
 
 workflows:
   test-deploy:

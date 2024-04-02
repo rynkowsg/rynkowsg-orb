@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ###
-# Script installs shellpack.
+# Script installs sosh.
 #
 # Example with defaults:
 #
-#   ./src/scripts/install_shellpack.bash
+#   ./src/scripts/install_sosh.bash
 #
 # Examples with params specified:
 #
-#  VERSION=dev INSTALL_DIR=~/bin ./src/scripts/install_shellpack.bash
-#  VERSION=2469670269b79a4a47975fb8ae1ef68fc9dd09e0 INSTALL_DIR=~/bin ./src/scripts/install_shellpack.bash
+#  VERSION=dev INSTALL_DIR=~/bin ./src/scripts/install_sosh.bash
+#  VERSION=2469670269b79a4a47975fb8ae1ef68fc9dd09e0 INSTALL_DIR=~/bin ./src/scripts/install_sosh.bash
 #
 ###
 
@@ -23,8 +23,8 @@ GREEN=$(printf '\033[32m')
 YELLOW=$(printf '\033[33m')
 NC=$(printf '\033[0m')
 
-NAME="shellpack"
-CMD_NAME="shellpack"
+NAME="sosh"
+CMD_NAME="sosh"
 
 # $1 - expected path
 path_in_path() {
@@ -38,7 +38,7 @@ path_in_path() {
 
 # $1 - version
 # $2 - install directory (optional)
-shellpack_install() {
+sosh_install() {
   printf "${GREEN}%s${NC}\n" "Installation started."
   local version=${1}
   local install_dir=${2:-"$(mktemp -d)"}
@@ -46,7 +46,7 @@ shellpack_install() {
   eval install_dir="${install_dir}"
   mkdir -p "${install_dir}"
   # install
-  curl -s https://raw.githubusercontent.com/rynkowsg/shellpack/${version}/main/src/pl/rynkowski/shellpack.cljc -o "${install_dir}/${CMD_NAME}"
+  curl -s https://raw.githubusercontent.com/rynkowsg/sosh/${version}/main/src/pl/rynkowski/sosh.cljc -o "${install_dir}/${CMD_NAME}"
   chmod +x "${install_dir}/${CMD_NAME}"
   printf "${GREEN}%s${NC}\n" "${NAME} installed in ${install_dir}."
   # update PATH (if needed)
@@ -58,7 +58,7 @@ shellpack_install() {
 
 DEFAULT_INSTALL_DIR=~/bin
 DEFAULT_VERSION="main"
-# https://github.com/rynkowsg/shellpack
+# https://github.com/rynkowsg/sosh
 
 detect_required_version() {
   # if version required specified take it
@@ -98,7 +98,7 @@ function main {
   local version install_dir
   version="$(detect_required_version)"
   install_dir="$(detect_install_dir)"
-  shellpack_install "${version}" "${install_dir}"
+  sosh_install "${version}" "${install_dir}"
 }
 
 # shellcheck disable=SC2199

@@ -2,7 +2,7 @@
 # releases: https://github.com/bats-core/bats-core/releases
 bats 1.10.0
 
-# required for: shellpack
+# required for: sosh
 # PLUGIN: https://github.com/halcyon/asdf-java
 java openjdk-17.0.2
 
