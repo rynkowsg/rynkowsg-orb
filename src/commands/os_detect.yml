@@ -1,0 +1,8 @@
+description: >
+  Detects running environment.
+
+steps:
+  - run:
+      shell: bash
+      name: Identifying OS
+      command: <<include(scripts/detect_os.bash)>>
