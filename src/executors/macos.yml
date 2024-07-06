@@ -19,5 +19,8 @@ parameters:
     # From Jun 2024, M1 Medium will be available for free plan.
     description: Configure the executor resource class
     type: enum
-    enum: ["macos.x86.medium.gen2", "macos.m1.medium.gen1", "macos.m1.large.gen1"]
-    default: "macos.x86.medium.gen2"
+    enum: ["macos.m1.medium.gen1", "macos.m1.large.gen1"]
+    default: "macos.m1.medium.gen1"
+    # The macos.x86.medium.gen2 resource class was deprecated on June 28, 2024.
+    # See our announcement for more details:
+    # https://discuss.circleci.com/t/macos-intel-support-deprecation-in-january-2024/48718
