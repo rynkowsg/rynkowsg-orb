@@ -37,25 +37,24 @@ jobs:
       - checkout
       - bats/install
       - asdf/install: {version: 0.14.0}
-      - restore_cache:
-          name: asdf - restore cache (partial)
-          keys:
-            - asdf-{{ checksum ".tool-versions" }}
+      - asdf/cache_restore
       - run:
-          name: asdf - install java
+          name: asdf - add plugins & tools
           command: |
-            git config --global advice.detachedHead false
-            asdf plugin add java https://github.com/halcyon/asdf-java.git
-            asdf install java
+            # install asdf-plugin-manager at first
+            asdf plugin-add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
+            asdf install asdf-plugin-manager
+            echo
+            asdf-plugin-manager add java && asdf install java
+            # java specific
             . ~/.asdf/plugins/java/set-java-home.bash
+            echo ". ~/.asdf/plugins/java/set-java-home.bash" >> $BASH_ENV
+            echo "JAVA_HOME=$(asdf where java)" >> $BASH_ENV
+            # review all tools installed
+            set -x
+            bash --version
             java --version
-      - save_cache:
-          name: asdf - save cache (partial)
-          key: asdf-{{ checksum ".tool-versions" }}
-          paths:
-            - ~/.asdf/installs
-            - ~/.asdf/plugins
-            - ~/.asdf/shims
+      - asdf/cache_save
       # yq
       - rynkowsg/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: true}
       - run:
