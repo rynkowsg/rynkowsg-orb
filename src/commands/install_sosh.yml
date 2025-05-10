@@ -2,6 +2,13 @@ description: >
   Installs sosh.
 
 parameters:
+  bash_path:
+    type: string
+    default: ""
+    description: |
+      The command requires at least Bash 4.
+      If the default is lower, it needs to be installed before the command.
+      If value not provided, the default bash is used.
   debug:
     type: boolean
     default: false
@@ -18,10 +25,21 @@ parameters:
       or a default version specified in the script.
 
 steps:
-  - run:
-      environment:
-        DEBUG: <<parameters.debug>>
-        INSTALL_DIR: <<parameters.install_dir>>
-        VERSION: <<parameters.version>>
-      name: "rynkowsg/install_sosh"
-      command: <<include(scripts/install_sosh.bash)>>
+  # when no custom bash provided
+  - when:
+      condition: {equal: [<<parameters.bash_path>>, ""]}
+      steps:
+        - run: &run_install_sosh_props
+            environment:
+              DEBUG: <<parameters.debug>>
+              INSTALL_DIR: <<parameters.install_dir>>
+              VERSION: <<parameters.version>>
+            name: "rynkowsg/install_sosh"
+            command: <<include(scripts/install_sosh.bash)>>
+  # when custom bash provided
+  - when:
+      condition: {not: {equal: [<<parameters.bash_path>>, ""]}}
+      steps:
+        - run:
+            shell: <<parameters.bash_path>>
+            <<: *run_install_sosh_props
