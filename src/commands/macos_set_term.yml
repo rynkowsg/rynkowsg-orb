@@ -1,0 +1,8 @@
+description: >
+  Sets TERM environment variable to xterm for macOS.
+
+steps:
+  - run:
+      name: "rynkowsg/macos_set_term"
+      command: |
+        echo "export TERM=xterm" >> $BASH_ENV

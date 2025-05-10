@@ -26,7 +26,7 @@ release-filters: &release-filters
 jobs:
   test_executor:
     parameters:
-      executor: {type: executor}
+      executor: { type: executor }
     executor: <<parameters.executor>>
     steps:
       - run: uname -a
@@ -77,6 +77,15 @@ jobs:
           name: "test command: install_sosh"
           command: VERSION="dev" INSTALL_DIR=~/bin ./test/commands/test_command_install_sosh.bats
 
+  test_macos_commands:
+    parameters:
+      executor: { type: executor }
+    executor: <<parameters.executor>>
+    steps:
+      - run: uname -a
+      - rynkowsg/macos_install_bash
+      - rynkowsg/macos_set_term
+
 workflows:
   test-deploy:
     jobs:
@@ -102,10 +111,19 @@ workflows:
       - test_install_commands:
           filters: *filters
 
+      - test_macos_commands:
+          name: "test_macos_commands; E:<<matrix.executor>>"
+          matrix:
+            parameters:
+              executor:
+                - rynkowsg/macos
+          filters: *filters
+
       - orb-tools/pack:
           requires:
             - test_executor
             - test_install_commands
+            - test_macos_commands
           filters: *filters
 
       - orb-tools/publish:
