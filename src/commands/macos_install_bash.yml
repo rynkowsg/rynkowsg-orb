@@ -1,0 +1,7 @@
+description: >
+  Installs bash on macOS.
+
+steps:
+  - run:
+      name: "rynkowsg/macos_install_bash"
+      command: <<include(scripts/macos_install_bash.bash)>>
