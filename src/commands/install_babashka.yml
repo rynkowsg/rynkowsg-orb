@@ -13,7 +13,7 @@ parameters:
   version:
     type: string
     default: ""
-    description:
+    description: |
       Requested version. If not provided it takes the version from .tools-version
       or a default version specified in the script.
 
