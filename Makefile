@@ -27,3 +27,7 @@ _lint_deps: @bin/lint.bash
 
 lint: _format_deps _lint_deps
 	\@bin/lint.bash
+
+validate:
+	circleci orb pack ./src > /tmp/orb
+	circleci orb validate /tmp/orb
