@@ -20,7 +20,7 @@ parameters:
   version:
     type: string
     default: "main"
-    description:
+    description: |
       Requested version. If not provided it takes the version from .tools-version
       or a default version specified in the script.
 
@@ -29,7 +29,7 @@ steps:
   - when:
       condition: {equal: [<<parameters.bash_path>>, ""]}
       steps:
-        - run: &run_install_sosh_props
+        - run:
             environment:
               DEBUG: <<parameters.debug>>
               INSTALL_DIR: <<parameters.install_dir>>
@@ -42,4 +42,9 @@ steps:
       steps:
         - run:
             shell: <<parameters.bash_path>>
-            <<: *run_install_sosh_props
+            environment:
+              DEBUG: <<parameters.debug>>
+              INSTALL_DIR: <<parameters.install_dir>>
+              VERSION: <<parameters.version>>
+            name: "rynkowsg/install_sosh"
+            command: <<include(scripts/install_sosh.bash)>>
