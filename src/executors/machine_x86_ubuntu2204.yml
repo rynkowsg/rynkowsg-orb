@@ -2,7 +2,7 @@ description: >
   Machine executor based on Ubuntu 22.04.
 
 machine:
-  image: ubuntu-2204:2024.01.1
+  image: ubuntu-2204:<<parameters.tag>>
 
 resource_class: <<parameters.resource_class>>
 
