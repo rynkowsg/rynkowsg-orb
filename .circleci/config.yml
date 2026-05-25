@@ -9,7 +9,7 @@ orbs:
   checkout: rynkowsg/checkout@0.3.1
   # orb info: https://circleci.com/developer/orbs/orb/circleci/orb-tools
   # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
-  orb-tools: circleci/orb-tools@12.3.1
+  orb-tools: circleci/orb-tools@12.4.0
   # orb info: https://circleci.com/developer/orbs/orb/circleci/shellcheck
   # changelog: https://github.com/CircleCI-Public/shellcheck-orb/releases
   shellcheck: circleci/shellcheck@3.4.0

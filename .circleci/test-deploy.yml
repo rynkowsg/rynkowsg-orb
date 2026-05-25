@@ -6,7 +6,7 @@ orbs:
   bats: circleci/bats@1.1.0
   # orb info: https://circleci.com/developer/orbs/orb/circleci/orb-tools
   # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
-  orb-tools: circleci/orb-tools@12.3.1
+  orb-tools: circleci/orb-tools@12.4.0
   # orb in this repo
   rynkowsg: {}
 
