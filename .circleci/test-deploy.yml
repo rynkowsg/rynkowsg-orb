@@ -102,8 +102,12 @@ workflows:
                 - rynkowsg/docker_x86_cimg_python
                 - rynkowsg/machine_arm
                 - rynkowsg/machine_arm_ubuntu2204
+                - rynkowsg/machine_arm_ubuntu2404
+                - rynkowsg/machine_arm_ubuntu2604
                 - rynkowsg/machine_x86_android
                 - rynkowsg/machine_x86_ubuntu2204
+                - rynkowsg/machine_x86_ubuntu2404
+                - rynkowsg/machine_x86_ubuntu2604
                 - rynkowsg/macos
           filters: *filters
 

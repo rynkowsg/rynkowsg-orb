@@ -1,0 +1,23 @@
+description: >
+  Machine executor based on Ubuntu 24.04.
+
+machine:
+  image: ubuntu-2404:<<parameters.tag>>
+
+resource_class: <<parameters.resource_class>>
+
+parameters:
+  tag:
+    # https://circleci.com/developer/machine/image/ubuntu-2404#image-tags
+    type: string
+    default: "2026.05.1"
+    description: >
+      What version of the ubuntu image? For full list, see
+      https://circleci.com/developer/machine/image/ubuntu
+
+  resource_class:
+    # https://circleci.com/docs/configuration-reference/#linuxvm-execution-environment
+    description: Configure the executor resource class
+    type: enum
+    enum: ["medium", "large", "xlarge", "2xlarge", "2xlarge+"]
+    default: "medium"
