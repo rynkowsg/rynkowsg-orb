@@ -1,0 +1,29 @@
+description: >
+  Adds given path/paths to PATH
+
+parameters:
+  custom_name:
+    type: string
+    default: "rynkowsg/add_to_path"
+    description: "Custom step name."
+  debug:
+    type: boolean
+    default: false
+    description: "Flag to run the script in debug mode."
+  path:
+    type: string
+    default: ""
+    description: "Single path to prepend to PATH."
+  paths:
+    type: string
+    default: ""
+    description: "Multiple paths to prepend to PATH, joined with ':'."
+
+steps:
+  - run:
+      environment:
+        DEBUG: <<parameters.debug>>
+        PATH_TO_ADD: <<parameters.path>>
+        PATHS_TO_ADD: <<parameters.paths>>
+      name: <<parameters.custom_name>>
+      command: <<include(scripts/add_to_path.bash)>>

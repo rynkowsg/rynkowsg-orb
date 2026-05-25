@@ -1,14 +1,14 @@
 description: >
-  Machine executor based on Ubuntu 22.04.
+  Machine executor based on Ubuntu 26.04.
 
 machine:
-  image: ubuntu-2204:<<parameters.tag>>
+  image: ubuntu-2604:<<parameters.tag>>
 
 resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
-    # https://circleci.com/developer/machine/image/ubuntu-2204#image-tags
+    # https://circleci.com/developer/machine/image/ubuntu-2604
     type: string
     default: "2026.05.1"
     description: >

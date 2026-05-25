@@ -1,0 +1,27 @@
+description: >
+  Prepend one or more directories to PATH (persisted via BASH_ENV
+  for subsequent steps). Paths must exist and be literal absolute or
+  relative paths - "~" is not expanded.
+
+usage:
+  version: 2.1
+  orbs:
+    rynkowsg: rynkowsg/rynkowsg@0.7.0
+
+  jobs:
+    build:
+      docker: [{image: "cimg/base:2026.04"}]
+      steps:
+        - run: mkdir -p ./tools/bin ./node_modules/.bin
+        # single path (relative paths are resolved to absolute)
+        - rynkowsg/add_to_path:
+            path: "./tools/bin"
+        # multiple paths, joined with ':'
+        - rynkowsg/add_to_path:
+            paths: "./tools/bin:./node_modules/.bin"
+        - run: echo "${PATH}"
+
+  workflows:
+    test:
+      jobs:
+        - build

@@ -8,9 +8,9 @@ resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
-    # https://circleci.com/developer/images/image/cimg/base
+    # https://circleci.com/developer/images/image/cimg/base#image-tags
     type: string
-    default: "2024.02"
+    default: "2026.04"
     description: >
       What version of the cimg/base image? For full list, see
       https://circleci.com/developer/images/image/cimg/base
