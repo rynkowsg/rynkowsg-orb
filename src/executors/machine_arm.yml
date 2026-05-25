@@ -10,7 +10,7 @@ parameters:
   image:
     # https://circleci.com/developer/images?imageType=machine
     type: string
-    default: "ubuntu-2204:2024.01.1"
+    default: "ubuntu-2604:2026.05.1"
     description: >
       Image.
 

@@ -8,9 +8,9 @@ resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
-    # https://circleci.com/developer/images/image/cimg/clojure
+    # https://circleci.com/developer/images/image/cimg/clojure#image-tags
     type: string
-    default: "1.11.1"
+    default: "1.12.0-openjdk-21.0"
     description: >
       The version of the cimg/clojure image. For full list, see
       https://circleci.com/developer/images/image/cimg/clojure

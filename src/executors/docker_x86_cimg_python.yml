@@ -8,9 +8,9 @@ resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
-    # https://circleci.com/developer/images/image/cimg/python
+    # https://circleci.com/developer/images/image/cimg/python#image-tags
     type: string
-    default: "3.11.8"
+    default: "3.14.5"
     description: >
       The version of the cimg/python image. For full list, see
       https://circleci.com/developer/images/image/cimg/python

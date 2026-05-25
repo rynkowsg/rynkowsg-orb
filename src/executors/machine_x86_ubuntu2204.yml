@@ -8,9 +8,9 @@ resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
-    # https://circleci.com/developer/machine/image/ubuntu-2204
+    # https://circleci.com/developer/machine/image/ubuntu-2204#image-tags
     type: string
-    default: "2024.01.1"
+    default: "2026.05.1"
     description: >
       What version of the ubuntu image? For full list, see
       https://circleci.com/developer/machine/image/ubuntu

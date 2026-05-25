@@ -8,8 +8,9 @@ resource_class: <<parameters.resource_class>>
 
 parameters:
   tag:
+    # https://circleci.com/developer/images/image/cimg/android#image-tags
     type: string
-    default: "2024.01.1"
+    default: "2026.03.1"
     description: >
       What version of the cimg/base image? For full list, see
       https://circleci.com/developer/images/image/cimg/android

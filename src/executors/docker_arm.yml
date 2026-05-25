@@ -10,7 +10,7 @@ parameters:
   image:
     # https://circleci.com/developer/images?imageType=docker
     type: string
-    default: "cimg/base:2024.02"
+    default: "cimg/base:2026.04"
     description: >
       Image.
 
