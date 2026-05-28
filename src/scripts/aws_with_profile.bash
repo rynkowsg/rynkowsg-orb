@@ -30,16 +30,13 @@ function load_credentials {
   env_out="$(aws configure export-credentials --profile "${PROFILE}" --format env)"
   # `--format env` output already contains `export` statements
   eval "${env_out}"
-  echo "DEBUG_2: AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:0:6}..." >&2
 }
 
 function main {
   if [ -z "${PROFILE}" ]; then echo "ERROR: PROFILE is required." >&2; return 1; fi
   if [ -z "${COMMAND}" ]; then echo "ERROR: COMMAND is required." >&2; return 1; fi
 
-  echo "DEBUG_1: AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:0:6}..." >&2
   load_credentials
-  echo "DEBUG_3: AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:0:6}..." >&2
 
   # run the wrapped command with the credentials in scope; do not impose
   # nounset on it (matches CircleCI's default shell options)
