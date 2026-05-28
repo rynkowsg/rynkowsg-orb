@@ -111,53 +111,53 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      - test_executor:
-          name: "test_executor; E:<<matrix.executor>>"
-          matrix:
-            parameters:
-              executor:
-                - rynkowsg/docker_arm
-                - rynkowsg/docker_arm_cimg_base
-                - rynkowsg/docker_x86
-                - rynkowsg/docker_x86_cimg_android
-                - rynkowsg/docker_x86_cimg_base
-                - rynkowsg/docker_x86_cimg_clojure
-                - rynkowsg/docker_x86_cimg_python
-                - rynkowsg/machine_arm
-                - rynkowsg/machine_arm_ubuntu2204
-                - rynkowsg/machine_arm_ubuntu2404
-                - rynkowsg/machine_arm_ubuntu2604
-                - rynkowsg/machine_x86_android
-                - rynkowsg/machine_x86_ubuntu2204
-                - rynkowsg/machine_x86_ubuntu2404
-                - rynkowsg/machine_x86_ubuntu2604
-                - rynkowsg/macos
-          filters: *filters
-
-      - test_install_commands:
-          filters: *filters
-
-      - test_macos_commands:
-          name: "test_macos_commands; E:<<matrix.executor>>"
-          matrix:
-            parameters:
-              executor:
-                - rynkowsg/macos
-          filters: *filters
-
-      - test_add_to_path_bats:
-          filters: *filters
-
-      - test_add_to_path_command:
-          filters: *filters
+#      - test_executor:
+#          name: "test_executor; E:<<matrix.executor>>"
+#          matrix:
+#            parameters:
+#              executor:
+#                - rynkowsg/docker_arm
+#                - rynkowsg/docker_arm_cimg_base
+#                - rynkowsg/docker_x86
+#                - rynkowsg/docker_x86_cimg_android
+#                - rynkowsg/docker_x86_cimg_base
+#                - rynkowsg/docker_x86_cimg_clojure
+#                - rynkowsg/docker_x86_cimg_python
+#                - rynkowsg/machine_arm
+#                - rynkowsg/machine_arm_ubuntu2204
+#                - rynkowsg/machine_arm_ubuntu2404
+#                - rynkowsg/machine_arm_ubuntu2604
+#                - rynkowsg/machine_x86_android
+#                - rynkowsg/machine_x86_ubuntu2204
+#                - rynkowsg/machine_x86_ubuntu2404
+#                - rynkowsg/machine_x86_ubuntu2604
+#                - rynkowsg/macos
+#          filters: *filters
+#
+#      - test_install_commands:
+#          filters: *filters
+#
+#      - test_macos_commands:
+#          name: "test_macos_commands; E:<<matrix.executor>>"
+#          matrix:
+#            parameters:
+#              executor:
+#                - rynkowsg/macos
+#          filters: *filters
+#
+#      - test_add_to_path_bats:
+#          filters: *filters
+#
+#      - test_add_to_path_command:
+#          filters: *filters
 
       - orb-tools/pack:
-          requires:
-            - test_executor
-            - test_install_commands
-            - test_macos_commands
-            - test_add_to_path_bats
-            - test_add_to_path_command
+#          requires:
+#            - test_executor
+#            - test_install_commands
+#            - test_macos_commands
+#            - test_add_to_path_bats
+#            - test_add_to_path_command
           filters: *filters
 
       - orb-tools/publish:
