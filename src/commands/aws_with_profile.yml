@@ -5,26 +5,52 @@ description: >
   written to BASH_ENV, so the credentials are scoped to this single step.
 
 parameters:
+  # Required
+  command:
+    type: string
+    description: "Command to run with the profile's credentials in scope."
+  profile:
+    type: string
+    description: "AWS profile whose credentials are used."
+  # Optional — task
+  working_directory:
+    type: string
+    default: "circleci-${CIRCLE_WORKFLOW_ID}"
+    description: >
+      Directory in which to run the command. When empty, the job's
+      working_directory is used.
+  # Optional — meta
   custom_name:
     type: string
-    default: "rynkowsg/aws_with_profile"
-    description: "Custom step name."
+    default: ""
+    description: >
+      Custom step name. When empty, the default name includes the command
+      being run.
   debug:
     type: boolean
     default: false
     description: "Flag to run the script in debug mode."
-  profile:
-    type: string
-    description: "AWS profile whose credentials are used."
-  command:
-    type: string
-    description: "Command to run with the profile's credentials in scope."
 
 steps:
-  - run:
-      environment:
-        PARAM_DEBUG: <<parameters.debug>>
-        PARAM_PROFILE: <<parameters.profile>>
-        PARAM_COMMAND: <<parameters.command>>
-      name: <<parameters.custom_name>>
-      command: <<include(scripts/aws_with_profile.bash)>>
+  - when:
+      condition: <<parameters.custom_name>>
+      steps:
+        - run:
+            environment:
+              PARAM_COMMAND: <<parameters.command>>
+              PARAM_PROFILE: <<parameters.profile>>
+              PARAM_DEBUG: <<parameters.debug>>
+            name: <<parameters.custom_name>>
+            working_directory: <<parameters.working_directory>>
+            command: <<include(scripts/aws_with_profile.bash)>>
+  - unless:
+      condition: <<parameters.custom_name>>
+      steps:
+        - run:
+            environment:
+              PARAM_COMMAND: <<parameters.command>>
+              PARAM_PROFILE: <<parameters.profile>>
+              PARAM_DEBUG: <<parameters.debug>>
+            name: "(rynkowsg/aws_with_profile) <<parameters.command>>"
+            working_directory: <<parameters.working_directory>>
+            command: <<include(scripts/aws_with_profile.bash)>>

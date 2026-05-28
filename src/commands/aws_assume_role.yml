@@ -5,26 +5,30 @@ description: >
   secrets) are cleared first.
 
 parameters:
-  custom_name:
-    type: string
-    default: "rynkowsg/aws_assume_role"
-    description: "Custom step name."
-  debug:
-    type: boolean
-    default: false
-    description: "Flag to run the script in debug mode."
+  # Required
   role_arn:
     type: string
     description: "ARN of the role to assume."
-  role_session_name:
-    type: string
-    description: "Session name for the assumed role."
+  # Optional — task
   profile:
     type: string
     default: ""
     description: >
       Optional source profile that calls sts:AssumeRole. When empty, --profile
       is omitted and the default credential chain is used.
+  role_session_name:
+    type: string
+    default: "circleci-${CIRCLE_WORKFLOW_ID}"
+    description: "Session name for the assumed role."
+  # Optional — meta
+  custom_name:
+    type: string
+    default: "(rynkowsg/aws_assume_role)"
+    description: "Custom step name."
+  debug:
+    type: boolean
+    default: false
+    description: "Flag to run the script in debug mode."
 
 steps:
   - run:
