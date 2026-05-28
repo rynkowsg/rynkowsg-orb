@@ -4,7 +4,7 @@ description: >
 parameters:
   custom_name:
     type: string
-    default: "rynkowsg/add_to_path"
+    default: "(rynkowsg/add_to_path)"
     description: "Custom step name."
   debug:
     type: boolean

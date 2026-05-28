@@ -15,7 +15,7 @@ parameters:
   # Optional — task
   working_directory:
     type: string
-    default: "circleci-${CIRCLE_WORKFLOW_ID}"
+    default: ""
     description: >
       Directory in which to run the command. When empty, the job's
       working_directory is used.
