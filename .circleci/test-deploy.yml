@@ -6,22 +6,21 @@ orbs:
   bats: circleci/bats@1.1.0
   # orb info: https://circleci.com/developer/orbs/orb/circleci/orb-tools
   # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
-  orb-tools: circleci/orb-tools@12.4.0
+  orb-tools: circleci/orb-tools@12.5.0
   # orb in this repo
   rynkowsg: {}
 
-# Use this tag to ensure test jobs always run,
-# even though the downstream publish job will only run on release tags.
-filters: &filters
-  tags:
-    only: /.*/
+# Every branch and every tag. Tags have to be named: a job with no tag filter is
+# skipped when a tag is pushed, and the publish jobs below require these, so on a
+# release tag they would have nothing to wait for.
+run_always: &run_always
+  branches: {only: '/.*/'}
+  tags: {only: '/.*/'}
 
-# Filter for release tags.
-release-filters: &release-filters
-  branches:
-    ignore: /.*/
-  tags:
-    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+# Only a release tag, never a branch.
+run_on_release: &run_on_release
+  branches: {ignore: '/.*/'}
+  tags: {only: '/^v[0-9]+\.[0-9]+\.[0-9]+$/'}
 
 jobs:
   test_executor:
@@ -132,10 +131,10 @@ workflows:
                 - rynkowsg/machine_x86_ubuntu2404
                 - rynkowsg/machine_x86_ubuntu2604
                 - rynkowsg/macos
-          filters: *filters
+          filters: *run_always
 
       - test_install_commands:
-          filters: *filters
+          filters: *run_always
 
       - test_macos_commands:
           name: "test_macos_commands; E:<<matrix.executor>>"
@@ -143,13 +142,13 @@ workflows:
             parameters:
               executor:
                 - rynkowsg/macos
-          filters: *filters
+          filters: *run_always
 
       - test_add_to_path_bats:
-          filters: *filters
+          filters: *run_always
 
       - test_add_to_path_command:
-          filters: *filters
+          filters: *run_always
 
       - orb-tools/pack:
           requires:
@@ -158,14 +157,14 @@ workflows:
             - test_macos_commands
             - test_add_to_path_bats
             - test_add_to_path_command
-          filters: *filters
+          filters: *run_always
 
       - orb-tools/publish:
           name: publish-dev
           requires:
             - orb-tools/pack
           context: circleci/orb-publishing-context
-          filters: *filters
+          filters: *run_always
           orb_name: rynkowsg/rynkowsg
           pub_type: dev
           vcs_type: <<pipeline.project.type>>
@@ -175,7 +174,7 @@ workflows:
           requires:
             - publish-dev
           context: circleci/orb-publishing-context
-          filters: *release-filters
+          filters: *run_on_release
           orb_name: rynkowsg/rynkowsg
           pub_type: production
           vcs_type: <<pipeline.project.type>>
