@@ -9,7 +9,7 @@
 #
 # Examples with params specified:
 #
-#  VERSION=dev INSTALL_DIR=~/bin ./src/scripts/install_sosh.bash
+#  VERSION=main INSTALL_DIR=~/bin ./src/scripts/install_sosh.bash
 #  VERSION=2469670269b79a4a47975fb8ae1ef68fc9dd09e0 INSTALL_DIR=~/bin ./src/scripts/install_sosh.bash
 #
 ###
