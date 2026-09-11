@@ -57,10 +57,10 @@ jobs:
           name: "test command: install_babashka"
           command: VERSION="1.3.188" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
       # sosh
-      - rynkowsg/install_sosh: {install_dir: ~/bin, version: "dev", debug: true}
+      - rynkowsg/install_sosh: {install_dir: ~/bin, version: "main", debug: true}
       - run:
           name: "test command: install_sosh"
-          command: VERSION="dev" INSTALL_DIR=~/bin ./test/commands/test_command_install_sosh.bats
+          command: VERSION="main" INSTALL_DIR=~/bin ./test/commands/test_command_install_sosh.bats
 
   test_macos_commands:
     parameters:
