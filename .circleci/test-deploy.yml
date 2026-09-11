@@ -42,15 +42,15 @@ jobs:
           # because install_babashka drops a bb that needs a JVM to run.
           tools: java
       # yq
-      - rynkowsg/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: true}
+      - rynkowsg/install_yq: {install_dir: ~/bin, version: "4.53.6", debug: true}
       - run:
           name: "test command: install_yq"
-          command: VERSION="4.35.2" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
+          command: VERSION="4.53.6" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
       # clj-kondo
-      - rynkowsg/install_clj_kondo: {install_dir: ~/bin, version: "2024.02.12", debug: true}
+      - rynkowsg/install_clj_kondo: {install_dir: ~/bin, version: "2026.08.04", debug: true}
       - run:
           name: "test command: install_clj_kondo"
-          command: VERSION="2024.02.12" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
+          command: VERSION="2026.08.04" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
       # babashka
       - rynkowsg/install_babashka: {install_dir: ~/bin, version: "1.13.220", debug: true}
       - run:
