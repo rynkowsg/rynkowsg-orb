@@ -1,27 +1,27 @@
 version: 2.1
 orbs:
-  # orb info: https://circleci.com/developer/orbs/orb/rynkowsg/asdf
-  asdf: rynkowsg/asdf@0.2.0
   # changelog: https://github.com/CircleCI-Public/BATS-orb/releases
   bats: circleci/bats@1.1.0
+  # orb info: https://circleci.com/developer/orbs/orb/rynkowsg/mise
+  # changelog: https://github.com/rynkowsg/mise-orb/blob/main/CHANGELOG.md
+  mise: rynkowsg/mise@0.1.0
   # orb info: https://circleci.com/developer/orbs/orb/circleci/orb-tools
   # changelog: https://github.com/CircleCI-Public/orb-tools-orb/releases
-  orb-tools: circleci/orb-tools@12.4.0
+  orb-tools: circleci/orb-tools@12.5.0
   # orb in this repo
   rynkowsg: {}
 
-# Use this tag to ensure test jobs always run,
-# even though the downstream publish job will only run on release tags.
-filters: &filters
-  tags:
-    only: /.*/
+# Every branch and every tag. Tags have to be named: a job with no tag filter is
+# skipped when a tag is pushed, and the publish jobs below require these, so on a
+# release tag they would have nothing to wait for.
+run_always: &run_always
+  branches: {only: '/.*/'}
+  tags: {only: '/.*/'}
 
-# Filter for release tags.
-release-filters: &release-filters
-  branches:
-    ignore: /.*/
-  tags:
-    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+# Only a release tag, never a branch.
+run_on_release: &run_on_release
+  branches: {ignore: '/.*/'}
+  tags: {only: '/^v[0-9]+\.[0-9]+\.[0-9]+$/'}
 
 jobs:
   test_executor:
@@ -36,45 +36,31 @@ jobs:
     steps:
       - checkout
       - bats/install
-      - asdf/install: {version: 0.14.0}
-      - asdf/cache_restore
-      - run:
-          name: asdf - add plugins & tools
-          command: |
-            # install asdf-plugin-manager at first
-            asdf plugin-add asdf-plugin-manager https://github.com/asdf-community/asdf-plugin-manager.git
-            asdf install asdf-plugin-manager
-            echo
-            asdf-plugin-manager add java && asdf install java
-            # java specific
-            . ~/.asdf/plugins/java/set-java-home.bash
-            echo ". ~/.asdf/plugins/java/set-java-home.bash" >> $BASH_ENV
-            echo "JAVA_HOME=$(asdf where java)" >> $BASH_ENV
-            # review all tools installed
-            set -x
-            bash --version
-            java --version
-      - asdf/cache_save
+      - mise/setup:
+          mise_version: v2026.9.4 # https://github.com/jdx/mise/releases
+          # The commands under test install their own binaries. java is here
+          # because install_babashka drops a bb that needs a JVM to run.
+          tools: java
       # yq
-      - rynkowsg/install_yq: {install_dir: ~/bin, version: "4.35.2", debug: true}
+      - rynkowsg/install_yq: {install_dir: ~/bin, version: "4.53.6", debug: true}
       - run:
           name: "test command: install_yq"
-          command: VERSION="4.35.2" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
+          command: VERSION="4.53.6" INSTALL_DIR=~/bin ./test/commands/test_command_install_yq.bats
       # clj-kondo
-      - rynkowsg/install_clj_kondo: {install_dir: ~/bin, version: "2024.02.12", debug: true}
+      - rynkowsg/install_clj_kondo: {install_dir: ~/bin, version: "2026.08.04", debug: true}
       - run:
           name: "test command: install_clj_kondo"
-          command: VERSION="2024.02.12" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
+          command: VERSION="2026.08.04" INSTALL_DIR=~/bin ./test/commands/test_command_install_clj_kondo.bats
       # babashka
-      - rynkowsg/install_babashka: {install_dir: ~/bin, version: "1.3.188", debug: true}
+      - rynkowsg/install_babashka: {install_dir: ~/bin, version: "1.13.220", debug: true}
       - run:
           name: "test command: install_babashka"
-          command: VERSION="1.3.188" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
+          command: VERSION="1.13.220" INSTALL_DIR=~/bin ./test/commands/test_command_install_babashka.bats
       # sosh
-      - rynkowsg/install_sosh: {install_dir: ~/bin, version: "dev", debug: true}
+      - rynkowsg/install_sosh: {install_dir: ~/bin, version: "main", debug: true}
       - run:
           name: "test command: install_sosh"
-          command: VERSION="dev" INSTALL_DIR=~/bin ./test/commands/test_command_install_sosh.bats
+          command: VERSION="main" INSTALL_DIR=~/bin ./test/commands/test_command_install_sosh.bats
 
   test_macos_commands:
     parameters:
@@ -132,10 +118,10 @@ workflows:
                 - rynkowsg/machine_x86_ubuntu2404
                 - rynkowsg/machine_x86_ubuntu2604
                 - rynkowsg/macos
-          filters: *filters
+          filters: *run_always
 
       - test_install_commands:
-          filters: *filters
+          filters: *run_always
 
       - test_macos_commands:
           name: "test_macos_commands; E:<<matrix.executor>>"
@@ -143,13 +129,13 @@ workflows:
             parameters:
               executor:
                 - rynkowsg/macos
-          filters: *filters
+          filters: *run_always
 
       - test_add_to_path_bats:
-          filters: *filters
+          filters: *run_always
 
       - test_add_to_path_command:
-          filters: *filters
+          filters: *run_always
 
       - orb-tools/pack:
           requires:
@@ -158,14 +144,14 @@ workflows:
             - test_macos_commands
             - test_add_to_path_bats
             - test_add_to_path_command
-          filters: *filters
+          filters: *run_always
 
       - orb-tools/publish:
           name: publish-dev
           requires:
             - orb-tools/pack
           context: circleci/orb-publishing-context
-          filters: *filters
+          filters: *run_always
           orb_name: rynkowsg/rynkowsg
           pub_type: dev
           vcs_type: <<pipeline.project.type>>
@@ -175,7 +161,7 @@ workflows:
           requires:
             - publish-dev
           context: circleci/orb-publishing-context
-          filters: *release-filters
+          filters: *run_on_release
           orb_name: rynkowsg/rynkowsg
           pub_type: production
           vcs_type: <<pipeline.project.type>>

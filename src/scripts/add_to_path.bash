@@ -26,7 +26,7 @@ function main {
   [ -n "${PATH_TO_ADD}" ] && paths+=("${PATH_TO_ADD}")
   if [ -n "${PATHS_TO_ADD}" ]; then
     local split_paths
-    IFS=':' read -ra split_paths <<< "${PATHS_TO_ADD}"
+    IFS=':' read -ra split_paths <<<"${PATHS_TO_ADD}"
     paths+=("${split_paths[@]}")
   fi
 

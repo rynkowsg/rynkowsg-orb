@@ -1,3 +1,42 @@
+diff --git a/src/scripts/add_to_path.bash b/src/scripts/add_to_path.bash
+index 5a10c55..01a1d01 100644
+--- a/src/scripts/add_to_path.bash
++++ b/src/scripts/add_to_path.bash
+@@ -39,11 +39,8 @@ function main {
+   done
+ 
+   local joined_paths
+-  joined_paths="$(
+-    IFS=':'
+-    echo "${abs_paths[*]}"
+-  )"
+-  echo "export PATH=\"${joined_paths}:\${PATH}\"" >>"${BASH_ENV}"
++  joined_paths="$(IFS=':'; echo "${abs_paths[*]}")"
++  echo "export PATH=\"${joined_paths}:\${PATH}\"" >> "${BASH_ENV}"
+ }
+ 
+ # shellcheck disable=SC2199
+diff --git a/test/commands/test_command_add_to_path.bats b/test/commands/test_command_add_to_path.bats
+index 26dc3ce..519f024 100755
+--- a/test/commands/test_command_add_to_path.bats
++++ b/test/commands/test_command_add_to_path.bats
+@@ -8,14 +8,8 @@
+ ###
+ 
+ # detect ROOT_DIR - BEGIN
+-TEST_DIR="$(
+-  cd "$(dirname "${BATS_TEST_FILENAME}")" || exit 1
+-  pwd -P
+-)"
+-ROOT_DIR="$(
+-  cd "${TEST_DIR}/../.." || exit 1
+-  pwd -P
+-)"
++TEST_DIR="$(cd "$(dirname "${BATS_TEST_FILENAME}")" || exit 1; pwd -P)"
++ROOT_DIR="$(cd "${TEST_DIR}/../.." || exit 1; pwd -P)"
+ # detect ROOT_DIR - end
+ 
+ setup() {
 diff --git a/test/commands/test_command_install_babashka.bats b/test/commands/test_command_install_babashka.bats
 index 9890dbe..06b4c27 100755
 --- a/test/commands/test_command_install_babashka.bats
