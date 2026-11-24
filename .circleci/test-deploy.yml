@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   # changelog: https://github.com/CircleCI-Public/BATS-orb/releases
-  bats: circleci/bats@1.1.0
+  bats: circleci/bats@1.2.0
   # orb info: https://circleci.com/developer/orbs/orb/rynkowsg/mise
   # changelog: https://github.com/rynkowsg/mise-orb/blob/main/CHANGELOG.md
   mise: rynkowsg/mise@0.1.1
