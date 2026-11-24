@@ -2,7 +2,7 @@ description: >
   MacOS executor.
 
 macos:
-  xcode: 27.3.0
+  xcode: <<parameters.xcode>>
 
 resource_class: <<parameters.resource_class>>
 
