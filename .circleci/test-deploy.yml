@@ -37,7 +37,8 @@ jobs:
       - checkout
       - bats/install
       - mise/setup:
-          mise_version: v2026.9.4 # https://github.com/jdx/mise/releases
+          # Keep mise_version in sync with the mise version in mise.toml.
+          mise_version: v2026.11.11 # https://github.com/jdx/mise/releases
           # The commands under test install their own binaries. java is here
           # because install_babashka drops a bb that needs a JVM to run.
           tools: java
