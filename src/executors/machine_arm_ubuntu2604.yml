@@ -10,7 +10,7 @@ parameters:
   tag:
     # https://circleci.com/developer/machine/image/ubuntu-2604
     type: string
-    default: "2026.05.1"
+    default: "2026.11.1"
     description: >
       What version of the ubuntu image? For full list, see
       https://circleci.com/developer/machine/image/ubuntu

@@ -2,7 +2,7 @@ description: >
   MacOS executor.
 
 macos:
-  xcode: 26.5.0
+  xcode: 27.3.0
 
 resource_class: <<parameters.resource_class>>
 
@@ -10,7 +10,7 @@ parameters:
   xcode:
     # https://circleci.com/developer/machine/image/xcode#image-tags
     type: string
-    default: "26.5.0"
+    default: "27.3.0"
     description: >
       Version of Xcode.
 

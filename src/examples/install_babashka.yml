@@ -8,7 +8,7 @@ usage:
 
   jobs:
     install_bb:
-      docker: [{image: "cimg/base:2026.04"}]
+      docker: [{image: "cimg/base:2026.11-26.04"}]
       steps:
         - rynkowsg/install_babashka
 

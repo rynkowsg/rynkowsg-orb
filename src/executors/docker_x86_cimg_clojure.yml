@@ -10,7 +10,7 @@ parameters:
   tag:
     # https://circleci.com/developer/images/image/cimg/clojure#image-tags
     type: string
-    default: "1.12.0-openjdk-21.0"
+    default: "1.12.7-openjdk-21.0"
     description: >
       The version of the cimg/clojure image. For full list, see
       https://circleci.com/developer/images/image/cimg/clojure
