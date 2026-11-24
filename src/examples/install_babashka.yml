@@ -4,7 +4,7 @@ description: >
 usage:
   version: 2.1
   orbs:
-    rynkowsg: rynkowsg/rynkowsg@0.7.0
+    rynkowsg: rynkowsg/rynkowsg@0.8.1
 
   jobs:
     install_bb:
